@@ -91,9 +91,9 @@ export default async function HomePage() {
             <Card className="overflow-hidden border-accent/10 bg-sand p-0 dark:border-white/10 dark:bg-slate-950/70">
               <div className="grid gap-0 sm:grid-cols-2">
                 <div className="surface-grid bg-brand-hero px-6 py-8 text-white dark:bg-brand-hero-dark">
-                  <p className="text-sm text-blue-100/80">Core formula</p>
-                  <h2 className="mt-4 text-2xl font-semibold">Room usage + equal motor share</h2>
-                  <p className="mt-4 text-sm leading-7 text-blue-50/95">
+                  <p className="text-sm text-blue-900/80">Core formula</p>
+                  <h2 className="mt-4 text-2xl font-semibold text-blue-900/80">Room usage + equal motor share</h2>
+                  <p className="mt-4 text-sm leading-7 text-blue-900/95">
                     Price per unit is calculated from the main bill amount and total main-meter units, then applied to
                     each room&apos;s own consumption plus a shared motor allocation.
                   </p>
