@@ -51,6 +51,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  if (user && request.nextUrl.pathname === "/auth/reset-password") {
+    return response;
+  }
+
   if (user && request.nextUrl.pathname === "/auth") {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/dashboard";

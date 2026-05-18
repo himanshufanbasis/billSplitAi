@@ -25,7 +25,7 @@ export function AuthPanel() {
   const searchParams = useSearchParams();
   const redirectPath = searchParams?.get("next") ?? "/dashboard";
   const { toast } = useToast();
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -74,6 +74,16 @@ export function AuthPanel() {
 
       if (!supabase) {
         throw new Error("Supabase is not configured.");
+      }
+
+      if (mode === "forgot") {
+        const email = String(new FormData(event.currentTarget).get("email") ?? "").trim();
+        const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/auth/reset-password`
+        });
+        if (resetError) throw resetError;
+        setSuccess(`Password reset link sent to ${email}. Check your inbox.`);
+        return;
       }
 
       if (mode === "signup") {
@@ -131,22 +141,36 @@ export function AuthPanel() {
 
   return (
     <Card className="w-full max-w-lg border-brand/10">
-      <div className="app-segmented mb-8 flex rounded-2xl p-1">
-        <button
-          className={`flex-1 rounded-2xl px-4 py-2 text-sm font-semibold transition ${mode === "login" ? "app-segmented-button-active" : "app-segmented-button"}`}
-          onClick={() => setMode("login")}
-          type="button"
-        >
-          Login
-        </button>
-        <button
-          className={`flex-1 rounded-2xl px-4 py-2 text-sm font-semibold transition ${mode === "signup" ? "app-segmented-button-active" : "app-segmented-button"}`}
-          onClick={() => setMode("signup")}
-          type="button"
-        >
-          Signup
-        </button>
-      </div>
+      {mode !== "forgot" ? (
+        <div className="app-segmented mb-8 flex rounded-2xl p-1">
+          <button
+            className={`flex-1 rounded-2xl px-4 py-2 text-sm font-semibold transition ${mode === "login" ? "app-segmented-button-active" : "app-segmented-button"}`}
+            onClick={() => setMode("login")}
+            type="button"
+          >
+            Login
+          </button>
+          <button
+            className={`flex-1 rounded-2xl px-4 py-2 text-sm font-semibold transition ${mode === "signup" ? "app-segmented-button-active" : "app-segmented-button"}`}
+            onClick={() => setMode("signup")}
+            type="button"
+          >
+            Signup
+          </button>
+        </div>
+      ) : (
+        <div className="mb-8">
+          <button
+            className="app-label mb-4 flex items-center gap-1 text-sm hover:underline"
+            onClick={() => { setMode("login"); setError(null); setSuccess(null); }}
+            type="button"
+          >
+            ← Back to login
+          </button>
+          <h2 className="text-xl font-semibold">Forgot password</h2>
+          <p className="app-label mt-1 text-sm">Enter your email and we'll send you a reset link.</p>
+        </div>
+      )}
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         {mode === "signup" ? (
@@ -172,17 +196,31 @@ export function AuthPanel() {
           />
         </label>
 
-        <label className="block">
-          <span className="app-label mb-2 block text-sm font-medium">Password</span>
-          <input
-            required
-            type="password"
-            minLength={6}
-            name="password"
-            className="app-input"
-            placeholder="Minimum 6 characters"
-          />
-        </label>
+        {mode !== "forgot" ? (
+          <label className="block">
+            <span className="app-label mb-2 block text-sm font-medium">Password</span>
+            <input
+              required
+              type="password"
+              minLength={6}
+              name="password"
+              className="app-input"
+              placeholder="Minimum 6 characters"
+            />
+          </label>
+        ) : null}
+
+        {mode === "login" ? (
+          <div className="text-right">
+            <button
+              type="button"
+              className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+              onClick={() => { setMode("forgot"); setError(null); setSuccess(null); }}
+            >
+              Forgot password?
+            </button>
+          </div>
+        ) : null}
 
         {mode === "signup" ? (
           <p className="app-notice-info rounded-2xl px-4 py-3 text-sm">
@@ -194,7 +232,7 @@ export function AuthPanel() {
         {success ? <p className="app-notice-success rounded-2xl px-4 py-3 text-sm">{success}</p> : null}
 
         <Button className="w-full" type="submit" disabled={loading}>
-          {loading ? "Please wait..." : mode === "login" ? "Sign in" : "Create account"}
+          {loading ? "Please wait..." : mode === "login" ? "Sign in" : mode === "signup" ? "Create account" : "Send reset link"}
         </Button>
       </form>
     </Card>
