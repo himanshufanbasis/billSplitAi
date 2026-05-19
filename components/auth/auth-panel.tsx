@@ -168,7 +168,7 @@ export function AuthPanel() {
             ← Back to login
           </button>
           <h2 className="text-xl font-semibold">Forgot password</h2>
-          <p className="app-label mt-1 text-sm">Enter your email and we'll send you a reset link.</p>
+          <p className="app-label mt-1 text-sm">Enter your email and we&apos;ll send you a reset link.</p>
         </div>
       )}
 
