@@ -293,7 +293,7 @@ export function BillingWorkspace({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-20 xl:pb-0">
       <FormErrorSummary title="Fix these details before saving" errors={[...new Set(validationErrors)]} />
 
       <div className="grid gap-6 xl:grid-cols-[1.32fr_1.68fr]">
@@ -306,7 +306,7 @@ export function BillingWorkspace({
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent dark:text-blue-200">Step 1</p>
                 <h3 className="mt-2 text-xl font-semibold text-ink dark:text-slate-50">Build the invoice setup</h3>
-                <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                <p className="mt-2 hidden text-sm leading-7 text-slate-600 dark:text-slate-300 sm:block">
                   Start with the billing month, official bill amount, total main-meter units, and motor meter values.
                   This turns the raw bill into a clean pricing base before room readings are added.
                 </p>
@@ -318,39 +318,39 @@ export function BillingWorkspace({
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent dark:text-blue-200">Invoice period</p>
-                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Choose which month this finalized snapshot belongs to.</p>
+                    <p className="mt-1 hidden text-sm text-slate-500 dark:text-slate-400 sm:block">Choose which month this finalized snapshot belongs to.</p>
                   </div>
-                  <span className="rounded-full bg-white/80 px-3 py-1 text-[11px] font-semibold text-slate-600 ring-1 ring-slate-200 dark:bg-slate-950/80 dark:text-slate-300 dark:ring-white/10">
+                  <span className="hidden rounded-full bg-white/80 px-3 py-1 text-[11px] font-semibold text-slate-600 ring-1 ring-slate-200 dark:bg-slate-950/80 dark:text-slate-300 dark:ring-white/10 sm:inline-flex">
                     Monthly snapshot
                   </span>
                 </div>
                 <MonthPicker value={billingMonth} onChange={setBillingMonth} disabled={disabled || loading !== false} />
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-                <div className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-4 dark:border-white/10 dark:bg-slate-950/75">
-                  <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
-                    <Gauge className="h-4 w-4" />
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em]">Expected rate</p>
+              <div className="grid grid-cols-3 gap-2 lg:grid-cols-1 lg:gap-3">
+                <div className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-3 dark:border-white/10 dark:bg-slate-950/75 lg:p-4">
+                  <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                    <Gauge className="h-3.5 w-3.5 shrink-0" />
+                    <p className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] sm:text-xs sm:tracking-[0.18em]">Rate</p>
                   </div>
-                  <p className="mt-3 text-2xl font-semibold text-ink dark:text-slate-50">{quickRate > 0 ? formatCurrency(quickRate) : "--"}</p>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Main bill amount divided by total units.</p>
+                  <p className="mt-2 text-base font-semibold text-ink dark:text-slate-50 sm:text-xl lg:text-2xl">{quickRate > 0 ? formatCurrency(quickRate) : "--"}</p>
+                  <p className="mt-1 hidden text-xs text-slate-500 dark:text-slate-400 lg:block">Main bill amount divided by total units.</p>
                 </div>
-                <div className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-4 dark:border-white/10 dark:bg-slate-950/75">
-                  <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
-                    <Waves className="h-4 w-4" />
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em]">Motor units</p>
+                <div className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-3 dark:border-white/10 dark:bg-slate-950/75 lg:p-4">
+                  <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                    <Waves className="h-3.5 w-3.5 shrink-0" />
+                    <p className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] sm:text-xs sm:tracking-[0.18em]">Motor</p>
                   </div>
-                  <p className="mt-3 text-2xl font-semibold text-ink dark:text-slate-50">{motorUnitsValue.toFixed(2)}</p>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Current motor reading minus previous motor reading.</p>
+                  <p className="mt-2 text-base font-semibold text-ink dark:text-slate-50 sm:text-xl lg:text-2xl">{motorUnitsValue.toFixed(2)}</p>
+                  <p className="mt-1 hidden text-xs text-slate-500 dark:text-slate-400 lg:block">Current motor reading minus previous.</p>
                 </div>
-                <div className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-4 dark:border-white/10 dark:bg-slate-950/75">
-                  <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
-                    <Sparkles className="h-4 w-4" />
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em]">Billing readiness</p>
+                <div className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-3 dark:border-white/10 dark:bg-slate-950/75 lg:p-4">
+                  <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                    <Sparkles className="h-3.5 w-3.5 shrink-0" />
+                    <p className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] sm:text-xs sm:tracking-[0.18em]">Status</p>
                   </div>
-                  <p className="mt-3 text-2xl font-semibold text-ink dark:text-slate-50">{validationErrors.length ? `${validationErrors.length} checks` : "Ready"}</p>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Fix setup issues here before final review.</p>
+                  <p className="mt-2 text-base font-semibold text-ink dark:text-slate-50 sm:text-xl lg:text-2xl">{validationErrors.length ? `${validationErrors.length} ✗` : "Ready"}</p>
+                  <p className="mt-1 hidden text-xs text-slate-500 dark:text-slate-400 lg:block">Fix setup issues before final review.</p>
                 </div>
               </div>
             </div>
@@ -403,15 +403,15 @@ export function BillingWorkspace({
           </Card>
 
           <Card className="animate-fade-up border-accent/10 bg-white dark:border-white/10 dark:bg-slate-900/82" style={{ animationDelay: "100ms" }}>
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-start gap-4">
-                <div className="rounded-2xl bg-accent-soft p-3 text-accent dark:bg-accent/15 dark:text-blue-200">
-                  <Zap className="h-5 w-5" />
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="flex items-start gap-3">
+                <div className="rounded-2xl bg-accent-soft p-2.5 text-accent dark:bg-accent/15 dark:text-blue-200 sm:p-3">
+                  <Zap className="h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent dark:text-blue-200">Step 2</p>
-                  <h3 className="mt-2 text-xl font-semibold text-ink dark:text-slate-50">Enter room readings</h3>
-                  <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                  <h3 className="mt-1 text-lg font-semibold text-ink dark:text-slate-50 sm:mt-2 sm:text-xl">Enter room readings</h3>
+                  <p className="mt-2 hidden text-sm leading-7 text-slate-600 dark:text-slate-300 sm:block">
                     Previous values are prefilled from the latest month where possible. Fill current readings room by room,
                     then attach photos only where needed.
                   </p>
@@ -420,7 +420,7 @@ export function BillingWorkspace({
               <button
                 type="button"
                 onClick={() => setProRateEnabled((v) => !v)}
-                className={`shrink-0 rounded-2xl border px-3 py-2 text-xs font-semibold transition ${proRateEnabled ? "border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-400" : "border-slate-200 bg-slate-50 text-slate-500 hover:border-brand hover:text-brand dark:border-white/10 dark:bg-slate-900 dark:text-slate-400"}`}
+                className={`shrink-0 rounded-xl border px-2.5 py-1.5 text-[11px] font-semibold transition sm:rounded-2xl sm:px-3 sm:py-2 sm:text-xs ${proRateEnabled ? "border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-400" : "border-slate-200 bg-slate-50 text-slate-500 hover:border-brand hover:text-brand dark:border-white/10 dark:bg-slate-900 dark:text-slate-400"}`}
               >
                 {proRateEnabled ? "Pro-rate on" : "Pro-rate off"}
               </button>
@@ -544,7 +544,7 @@ export function BillingWorkspace({
                       <h4 className="text-base font-semibold text-ink dark:text-slate-50">{row.memberName}</h4>
                       <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-accent ring-1 ring-accent/10 dark:bg-slate-900 dark:text-blue-200 dark:ring-white/10">{units.toFixed(2)} units</span>
                     </div>
-                    <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                    <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
                       <label className="block">
                         <span className="mb-2 block text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Previous</span>
                         <input type="number" min="0" step="0.01" value={row.previousReading} onChange={(event) => updateRow(row.memberId, "previousReading", event.target.value)} className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-brand" />
@@ -633,7 +633,7 @@ export function BillingWorkspace({
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent dark:text-blue-200">Step 3</p>
                 <h3 className="mt-2 text-xl font-semibold text-ink dark:text-slate-50">Review before saving</h3>
-                <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                <p className="mt-2 hidden text-sm leading-7 text-slate-600 dark:text-slate-300 sm:block">
                   Keep the main summary and actions on the right so users can verify numbers and save without losing context.
                 </p>
               </div>
@@ -698,6 +698,25 @@ export function BillingWorkspace({
               </Button>
             </div>
           </Card>
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200 bg-white/95 px-4 py-3 backdrop-blur-sm dark:border-white/10 dark:bg-slate-950/95 xl:hidden">
+        <div className="mx-auto flex max-w-lg gap-3">
+          <Button
+            className="flex-1"
+            onClick={() => handleSubmit("draft")}
+            disabled={loading !== false || !rows.length || disabled}
+          >
+            {loading === "draft" ? "Saving…" : "Save draft"}
+          </Button>
+          <Button
+            className="flex-1"
+            onClick={() => handleSubmit("finalize")}
+            disabled={loading !== false || !rows.length || disabled}
+          >
+            {loading === "finalize" ? "Finalizing…" : "Finalize"}
+          </Button>
         </div>
       </div>
     </div>

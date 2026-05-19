@@ -67,12 +67,23 @@ export function AppShell({
     router.refresh();
   }
 
-  function SidebarContent() {
+  function SidebarContent({ onClose }: { onClose?: () => void }) {
     return (
       <>
         <div className="flex items-start justify-between gap-4">
           <Logo tone="light" />
-          <ThemeToggle light />
+          {onClose ? (
+            <button
+              type="button"
+              aria-label="Close navigation"
+              onClick={onClose}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-white transition hover:bg-white/20"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          ) : (
+            <ThemeToggle light />
+          )}
         </div>
 
         <p className="mt-8 text-sm text-blue-100/80">
@@ -178,20 +189,7 @@ export function AppShell({
         )}
         aria-hidden={!mobileNavOpen}
       >
-        <div className="flex items-center justify-between gap-4">
-          <Logo tone="light" />
-          <button
-            type="button"
-            aria-label="Close navigation"
-            onClick={() => setMobileNavOpen(false)}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-white transition hover:bg-white/20"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="mt-6">
-          <SidebarContent />
-        </div>
+        <SidebarContent onClose={() => setMobileNavOpen(false)} />
       </aside>
     </div>
   );
