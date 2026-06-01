@@ -46,7 +46,7 @@ export default async function AuthPage() {
             </Suspense>
           </div>
         </div>
-      </div>
+      </div> 
     </main>
   );
 }
