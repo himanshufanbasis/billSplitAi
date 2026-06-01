@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/shared/button";
 import { useToast } from "@/components/shared/toast-provider";
+import { ArchiveRestore } from "lucide-react";
 
 export function ManageRoomActions({
   roomId,
@@ -23,7 +24,7 @@ export function ManageRoomActions({
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(initialName);
-  const [loading, setLoading] = useState<false | "save" | "delete">(false);
+  const [loading, setLoading] = useState<false | "save" | "delete" | "restore">(false);
   const [message, setMessage] = useState<string | null>(null);
 
   async function handleSave(event: FormEvent<HTMLFormElement>) {
@@ -56,6 +57,28 @@ export function ManageRoomActions({
       router.refresh();
     } catch (error) {
       const text = error instanceof Error ? error.message : "Unable to update room.";
+      setMessage(text);
+      toast(text, "error");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleRestore() {
+    setLoading("restore");
+    setMessage(null);
+    try {
+      const response = await fetch(`/api/rooms/${roomId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_active: true })
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error ?? "Unable to restore room.");
+      toast("Room restored to active.");
+      router.refresh();
+    } catch (error) {
+      const text = error instanceof Error ? error.message : "Unable to restore room.";
       setMessage(text);
       toast(text, "error");
     } finally {
@@ -147,9 +170,15 @@ export function ManageRoomActions({
           <Pencil className="mr-2 h-4 w-4" />
           Edit
         </Button>
+        {!isActive ? (
+          <Button type="button" variant="secondary" disabled={disabled || loading !== false} onClick={handleRestore}>
+            <ArchiveRestore className="mr-2 h-4 w-4" />
+            {loading === "restore" ? "Restoring..." : "Restore"}
+          </Button>
+        ) : null}
         <Button type="button" variant="danger" disabled={disabled || loading !== false} onClick={handleDelete}>
           <Trash2 className="mr-2 h-4 w-4" />
-          {loading === "delete" ? "Removing..." : isActive ? "Delete" : "Remove archived"}
+          {loading === "delete" ? "Removing..." : isActive ? "Delete" : "Remove"}
         </Button>
       </div>
       {message ? <p className="text-sm text-[color:var(--text-secondary)]">{message}</p> : null}

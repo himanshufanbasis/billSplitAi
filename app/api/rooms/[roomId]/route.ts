@@ -5,7 +5,10 @@ import { isSupabaseConfigured } from "@/lib/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const updateSchema = z.object({
-  name: z.string().min(1).max(80)
+  name: z.string().min(1).max(80).optional(),
+  is_active: z.boolean().optional()
+}).refine((data) => data.name !== undefined || data.is_active !== undefined, {
+  message: "Provide at least name or is_active"
 });
 
 async function getAuthorizedRoom(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>, roomId: string) {
@@ -57,9 +60,13 @@ export async function PATCH(
     return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid payload" }, { status: 400 });
   }
 
+  const patch: Record<string, unknown> = {};
+  if (parsed.data.name !== undefined) patch.name = parsed.data.name.trim();
+  if (parsed.data.is_active !== undefined) patch.is_active = parsed.data.is_active;
+
   const { error } = await supabase!
     .from("rooms")
-    .update({ name: parsed.data.name.trim() })
+    .update(patch)
     .eq("id", params.roomId);
 
   if (error) {
